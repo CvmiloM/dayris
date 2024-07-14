@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Corazones</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffcccb;
+            margin: 0;
+            position: relative; /* Añadido */
+        }
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 2rem;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            animation: floatHeart 2s infinite ease-in-out;
+        }
+        .black-heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 2rem;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            animation: floatHeart 2s infinite ease-in-out;
+            color: black;
+        }
+        .red-heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 2rem;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            animation: floatHeart 2s infinite ease-in-out;
+            color: red;
+        }
+        @keyframes floatHeart {
+            0% {
+                transform: rotate(-45deg) translate(0, 0);
+            }
+            50% {
+                transform: rotate(-45deg) translate(0, -30px);
+            }
+            100% {
+                transform: rotate(-45deg) translate(0, 0);
+            }
+        }
+        #score {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: #e91e63;
+            z-index: 100;
+        }
+        #instructions {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #start-button {
+            display: block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #e91e63;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Estilo para el botón de volver */
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #e91e63;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background-color: #ff4757;
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div id="instructions">
+        <h2>Instrucciones</h2>
+        <p>Haz clic en los corazones ❤️ para ganar puntos.</p>
+        <p>Evita hacer clic en los corazones 🖤 y 🟥, si los tocas perderás puntos.</p>
+        <button id="start-button">Comenzar</button>
+    </div>
+
+    <div id="score">Puntaje: 0</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var score = 0;
+            var scoreDisplay = document.getElementById('score');
+            var instructions = document.getElementById('instructions');
+            var startButton = document.getElementById('start-button');
+
+            startButton.addEventListener('click', function() {
+                instructions.style.display = 'none';
+                startGame();
+            });
+
+            function startGame() {
+                score = 0;
+                scoreDisplay.textContent = 'Puntaje: ' + score;
+                setInterval(function() {
+                    createHeart();
+                }, 200); 
+            }
+
+            function createHeart() {
+                var heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                var randomX = Math.random() * (window.innerWidth - 50);
+                var randomY = Math.random() * (window.innerHeight - 50);
+                heart.style.left = randomX + 'px';
+                heart.style.top = randomY + 'px';
+                document.body.appendChild(heart);
+
+                heart.addEventListener('click', function() {
+                    if (heart.classList.contains('heart')) {
+                        score += 10;
+                    } else if (heart.classList.contains('black-heart') || heart.classList.contains('red-heart')) {
+                        score -= 20; 
+                    }
+                    scoreDisplay.textContent = 'Puntaje: ' + score;
+                    heart.remove();
+
+                    if (score >= 500) {
+                        alert('Ganaste amorcito  Te amo mi vidaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                        restartGame();
+                    } else if (score <= -10) {
+                        alert('Puxa amor perdiste :c ');
+                        restartGame();
+                    }
+                });
+
+                setTimeout(function() {
+                    heart.remove();
+                }, 2000); 
+                var randomNumber = Math.random();
+                if (randomNumber < 0.1) {
+                    heart.classList.remove('heart');
+                    heart.classList.add('black-heart');
+                    heart.innerHTML = '🖤';
+                } else if (randomNumber < 0.2) {
+                    heart.classList.remove('heart');
+                    heart.classList.add('red-heart');
+                    heart.innerHTML = '🟥';
+                }
+            }
+
+            function restartGame() {
+                score = 0;
+                scoreDisplay.textContent = 'Puntaje: ' + score;
+            }
+        });
+        
+    </script>
+
+    <!-- Botón para volver a carta.html -->
+    <a href="carta.html" class="back-button">Volver a la carta</a>
+    
+</body>
+</html>
